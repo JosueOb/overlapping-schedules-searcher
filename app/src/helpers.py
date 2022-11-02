@@ -1,6 +1,6 @@
 import re
 import pathlib
-from ._exceptions import ValidationError, FileReaderError
+from .exceptions import ValidationError, FileReaderError
 
 
 def read_file(path: str) -> list:

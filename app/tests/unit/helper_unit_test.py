@@ -3,7 +3,8 @@ import pytest
 from typing import Callable
 from pytest_mock import MockFixture
 
-from app.src import read_file, FileReaderError
+from app.src.helpers import read_file
+from app.src.exceptions import FileReaderError
 
 
 @pytest.mark.reader
