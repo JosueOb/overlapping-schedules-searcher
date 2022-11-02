@@ -1,1 +1,1 @@
-from .main import search_overlapping_schedules
+from .main import overlapping_schedules_searcher

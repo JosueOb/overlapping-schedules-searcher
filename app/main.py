@@ -1,11 +1,12 @@
-from .src import read_field, validate_content, ValidationError
+from .src import read_file, validate_content, ValidationError, FileReaderError
 
 
-def search_overlapping_schedules(file_path: str) -> list[str]:
+def overlapping_schedules_searcher(file_path: str) -> list[str]:
     try:
-        file_content = read_field(path=file_path)
-        validated_content = validate_content(content=file_content)
-        # schedules_by_employee = group_schedules_by_employee()
-        return validated_content
-    except ValidationError as error:
+        file_content = read_file(path=file_path)
+        validated_file_content = validate_content(content=file_content)
+
+        return validated_file_content
+
+    except (FileReaderError, ValidationError) as error:
         print(str(error))
