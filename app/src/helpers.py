@@ -1,9 +1,10 @@
 import re
 import pathlib
 from .exceptions import ValidationError, FileReaderError
+from .utils import ABBREVIATION_DAYS
 
 
-def read_file(path: str) -> list:
+def read_file(path: str) -> list[str]:
     if not _is_file_valid(path):
         raise FileReaderError(f"Make sure that the file {path} exists and is a .txt file")
     try:
@@ -15,18 +16,15 @@ def read_file(path: str) -> list:
 
 
 def validate_content(content: list[str]) -> list[str]:
-    valid_content = []
     error_messages = []
     for index, line in enumerate(content):
         if not _is_the_line_valid(line):
-            error_messages.append(f"The format of line n# {index + 1} is invalid.")
-
-        valid_content.append(line)
+            error_messages.append(f"The format of line n# {index + 1} is invalid '{line}'")
 
     if error_messages:
         raise ValidationError("\n".join(error_messages))
 
-    return valid_content
+    return content
 
 
 def _is_file_valid(file_path: str, allowed_extension: str = ".txt") -> bool:
@@ -35,11 +33,17 @@ def _is_file_valid(file_path: str, allowed_extension: str = ".txt") -> bool:
 
 
 def _format_content(content: list[str]) -> list[str]:
-    return [line.replace("\n", "").replace(" ", "") for line in content]
+    return [line.replace("\n", "").replace(" ", "").rstrip(",") for line in content]
 
 
 def _is_the_line_valid(line: str) -> bool:
-    # TODO: complete the regex expression
-    # regex = r"^\w+=((MO|TU|WE|TH|FR|SA|SU)$(0-9))+$"
-    regex = r"^\w"
+    regex = (
+        r"^(\w+)=("
+        rf"({'|'.join(ABBREVIATION_DAYS)})"
+        r"(0[0-9]|1[0-9]|2[0-3])"
+        r":([0-5][0-9])"
+        r"-(0[0-9]|1[0-9]|2[0-3])"
+        r":([0-5][0-9]),?"
+        r")*?$"
+    )
     return bool(re.search(pattern=regex, string=line))

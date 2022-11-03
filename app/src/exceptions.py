@@ -10,3 +10,10 @@ class FileReaderError(Exception):
         This exception is used when reading a file fails.
     """
     pass
+
+
+class OverlappingSchedulesError(Exception):
+    """
+        This exception is used when the schedule overlap search fails.
+    """
+    pass

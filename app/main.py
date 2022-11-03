@@ -1,5 +1,5 @@
 from .src.helpers import read_file, validate_content
-from .src.exceptions import ValidationError, FileReaderError
+from .src.exceptions import ValidationError, FileReaderError, OverlappingSchedulesError
 
 
 def overlapping_schedules_searcher(file_path: str) -> list[str]:
@@ -10,4 +10,4 @@ def overlapping_schedules_searcher(file_path: str) -> list[str]:
         return validated_file_content
 
     except (FileReaderError, ValidationError) as error:
-        print(str(error))
+        raise OverlappingSchedulesError(str(error)) from error
